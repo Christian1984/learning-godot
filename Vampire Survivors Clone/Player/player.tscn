@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=8 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
@@ -6,6 +6,47 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rt7i1"]
 radius = 5.0
 height = 24.0
+
+[sub_resource type="Animation" id="Animation_e14kf"]
+resource_name = "walk"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_hylxk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qemwh"]
+_data = {
+"RESET": SubResource("Animation_hylxk"),
+"walk": SubResource("Animation_e14kf")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a3wdl"]
+animation = &"walk"
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 motion_mode = 1
@@ -20,3 +61,12 @@ position = Vector2(2, 1)
 shape = SubResource("CapsuleShape2D_rt7i1")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_qemwh")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeAnimation_a3wdl")
+anim_player = NodePath("../AnimationPlayer")
