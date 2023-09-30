@@ -10,12 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Top Down Shooter"
-run/main_scene="res://scenes/level.tscn"
+config/name="Vampire Survivors Clone"
 config/features=PackedStringArray("4.1", "Mobile")
-config/icon="res://graphics/icon.svg"
+config/icon="res://icon.svg"
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
