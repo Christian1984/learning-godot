@@ -28,3 +28,23 @@ window/stretch/mode="canvas_items"
 ## Position
 
 a node has a `position` property and `global_position` property. the first is always relative to its parent, while the latter is always relative to world space, i.e. the global `(0,0)` origin. depending on the use case, use one or the other.
+
+## Call Deferred
+
+when changing physics properties inside the physics loop, use `call_deferred`, as described here:
+
+> This is a common problem people have, just as the message says, you can't manipulate the physics state inside of a physics lifecycle callback.
+>
+> Your \_on_HitBox_area_entered function has a line that disables a collision shape $HitBox/CollisionShape2D.disabled = true. This is a no-no.
+>
+> You can do something like this instead:
+
+```
+func _on_HitBox_area_entered(area):
+    call_deferred("_on_HitBox_area_entered_deferred", area)
+
+func _on_HitBox_area_entered_deferred(area):
+    # Inject all the code here that was originally in _on_HitBox_area_entered
+```
+
+~ https://www.reddit.com/r/godot/comments/ign0y6/comment/g2vohtg/?utm_source=share&utm_medium=web2x&context=3
