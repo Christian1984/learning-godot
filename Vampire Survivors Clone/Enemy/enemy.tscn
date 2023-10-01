@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dfuvmhsnswte5"]
+[gd_scene load_steps=9 format=3 uid="uid://dfuvmhsnswte5"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_emufy"]
 [ext_resource type="Texture2D" uid="uid://7b2k7ulcnud1" path="res://Textures/Enemy/kolbold_weak.png" id="1_fnf7r"]
+[ext_resource type="PackedScene" uid="uid://dn5a2ntclprcp" path="res://Helpers/hitbox.tscn" id="3_4hvib"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j53se"]
 radius = 5.0
@@ -68,3 +69,7 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeAnimation_3t2e2")
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="Hitbox" parent="." instance=ExtResource("3_4hvib")]
+position = Vector2(2, 2)
+collision_layer = 2

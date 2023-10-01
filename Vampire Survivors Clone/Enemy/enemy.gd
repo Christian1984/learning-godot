@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 @export var movement_speed = 30
+@export var health: int = 10
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
 

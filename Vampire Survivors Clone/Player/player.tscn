@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=9 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
+[ext_resource type="PackedScene" uid="uid://dt1743waxauqe" path="res://Helpers/hurtbox.tscn" id="3_eqbi5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rt7i1"]
 radius = 5.0
@@ -70,3 +71,9 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeAnimation_a3wdl")
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="Hurtbox" parent="." instance=ExtResource("3_eqbi5")]
+position = Vector2(2, 1)
+collision_mask = 2
+
+[connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]

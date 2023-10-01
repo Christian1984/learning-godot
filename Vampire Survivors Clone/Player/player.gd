@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 @export var movementSpeed: float = 80
+@export var health: int = 80
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
 
@@ -21,3 +23,8 @@ func movement():
 	animation_tree.active = velocity.length_squared() > 0
 	
 	move_and_slide()
+
+func _on_hurtbox_hurt(damage):
+	print_debug("_on_hitbox_hurt_character")
+	health -= damage
+	print_debug(health)
