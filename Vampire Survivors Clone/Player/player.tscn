@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=11 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
@@ -50,17 +50,20 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a3wdl"]
 animation = &"walk"
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7x7wp"]
+radius = 367.165
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 motion_mode = 1
 script = ExtResource("1_0igou")
 ice_spear_resource = ExtResource("2_may2d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-2, -1)
 texture = ExtResource("1_8v2pj")
 hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(2, 1)
 shape = SubResource("CapsuleShape2D_rt7i1")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -75,7 +78,6 @@ tree_root = SubResource("AnimationNodeAnimation_a3wdl")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="Hurtbox" parent="." instance=ExtResource("3_eqbi5")]
-position = Vector2(2, 1)
 collision_mask = 2
 
 [node name="Attack" type="Node" parent="."]
@@ -87,8 +89,18 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 wait_time = 0.075
 
+[node name="EnemyDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetector"]
+shape = SubResource("CircleShape2D_7x7wp")
+
 [connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
 [connection signal="timeout" from="Attack/IceSpearTimer" to="." method="_on_ice_spear_timer_timeout"]
 [connection signal="timeout" from="Attack/IceSpearAttackTimer" to="." method="_on_ice_spear_attack_timer_timeout"]
+[connection signal="body_entered" from="EnemyDetector" to="." method="_on_enemy_detector_body_entered"]
+[connection signal="body_exited" from="EnemyDetector" to="." method="_on_enemy_detector_body_exited"]
 
 [editable path="Hurtbox"]

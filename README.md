@@ -48,3 +48,16 @@ func _on_HitBox_area_entered_deferred(area):
 ```
 
 ~ https://www.reddit.com/r/godot/comments/ign0y6/comment/g2vohtg/?utm_source=share&utm_medium=web2x&context=3
+
+## Spawning Stuff
+
+in order to spawn something, it first needs to be instantiated from a `Resource` and then added as a child with `add_child()`. it inherits its spawner's `transform`, though. to prevent this, either spawn it as a child of a specific Node or set it's CanvasItem's `Top Level` property to `true` in the inspector.
+
+e.g.
+
+```
+var ice_spear: IceSpear = ice_spear_resource.instantiate()	
+# get_node("/root/World").add_child(ice_spear)
+# get_parent().add_child(ice_spear)
+add_child(ice_spear)
+```

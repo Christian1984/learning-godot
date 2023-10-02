@@ -16,7 +16,7 @@ var duration = 0
 @onready var player = get_tree().get_first_node_in_group("player")
 
 func _ready():
-	rotation = global_position.angle_to_point(Vector2.ONE)
+	rotation = global_position.angle_to_point(target_pos)
 	
 func _physics_process(delta):
 	position += speed * delta * transform.x

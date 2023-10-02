@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var health: int = 80
 
 # Attack Resources
-@export var ice_spear_resource: Resource
+@export var ice_spear_resource: PackedScene
 # @onready var ice_spear_resource = load("res://Player/Attacks/ice_spear_resource.tscn")
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -64,10 +64,31 @@ func _on_ice_spear_attack_timer_timeout():
 	if ice_spear_ammo > 0 and not ice_spear_resource ==  null:
 		var ice_spear: IceSpear = ice_spear_resource.instantiate()	
 		ice_spear.position = position
+		ice_spear.target_pos = get_nearest_enemy()
+		ice_spear.level = ice_spear_level
 
 		# get_node("/root/World").add_child(ice_spear)
-		get_parent().add_child(ice_spear)
+		# get_parent().add_child(ice_spear)
+		add_child(ice_spear)
+
 		ice_spear_ammo -= 1
 		pass
 	else:
 		ice_spear_attack_timer.stop()
+
+func get_nearest_enemy():
+	if enemies_close.size() > 0:
+		var target =  enemies_close.pick_random().global_position
+		print_debug(target)
+		return target
+
+	return position + Vector2.from_angle(randf() * 2 * PI)
+
+func _on_enemy_detector_body_entered(body):
+	if not enemies_close.has(body):
+		enemies_close.append(body)
+
+
+func _on_enemy_detector_body_exited(body):
+	if enemies_close.has(body):
+		enemies_close.erase(body)
