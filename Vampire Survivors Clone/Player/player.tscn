@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=10 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
+[ext_resource type="PackedScene" uid="uid://cv2tkni4hsjmu" path="res://Player/Attacks/ice_spear.tscn" id="2_may2d"]
 [ext_resource type="PackedScene" uid="uid://dt1743waxauqe" path="res://Helpers/hurtbox.tscn" id="3_eqbi5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rt7i1"]
@@ -52,6 +53,7 @@ animation = &"walk"
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 motion_mode = 1
 script = ExtResource("1_0igou")
+ice_spear_resource = ExtResource("2_may2d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_8v2pj")
@@ -76,4 +78,17 @@ anim_player = NodePath("../AnimationPlayer")
 position = Vector2(2, 1)
 collision_mask = 2
 
+[node name="Attack" type="Node" parent="."]
+
+[node name="IceSpearTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+
+[node name="IceSpearAttackTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+wait_time = 0.075
+
 [connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
+[connection signal="timeout" from="Attack/IceSpearTimer" to="." method="_on_ice_spear_timer_timeout"]
+[connection signal="timeout" from="Attack/IceSpearAttackTimer" to="." method="_on_ice_spear_attack_timer_timeout"]
+
+[editable path="Hurtbox"]

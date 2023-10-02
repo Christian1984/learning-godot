@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Helpers/hurtbox.gd" id="1_5tmfx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wq1it"]
+height = 28.0
 
 [node name="Hurtbox" type="Area2D"]
 collision_layer = 0

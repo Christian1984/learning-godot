@@ -8,7 +8,7 @@ extends CharacterBody2D
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var direction = global_position.direction_to(player.global_position)
 		
 	velocity = movement_speed * direction
@@ -21,3 +21,12 @@ func _physics_process(delta):
 	animation_tree.active = velocity.length_squared() > 0
 	
 	move_and_slide()
+
+
+func _on_hurtbox_hurt(damage):
+	print_debug("_on_hitbox_hurt_kobold")
+	health -= damage
+	print_debug(health)
+	
+	if health <= 0:
+		queue_free()
