@@ -16,7 +16,7 @@ extends CharacterBody2D
 @onready var ice_spear_attack_timer: Timer = %IceSpearAttackTimer
 
 var ice_spear_ammo = 0
-var ice_spear_base_ammo = 5
+var ice_spear_base_ammo = 1
 var ice_spear_attack_speed = 1.5
 var ice_spear_level = 1
 var enemies_close: Array[Node2D] = []
@@ -72,7 +72,6 @@ func _on_ice_spear_attack_timer_timeout():
 		add_child(ice_spear)
 
 		ice_spear_ammo -= 1
-		pass
 	else:
 		ice_spear_attack_timer.stop()
 

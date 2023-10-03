@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dfuvmhsnswte5"]
+[gd_scene load_steps=12 format=3 uid="uid://dfuvmhsnswte5"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_emufy"]
 [ext_resource type="Texture2D" uid="uid://7b2k7ulcnud1" path="res://Textures/Enemy/kolbold_weak.png" id="1_fnf7r"]
+[ext_resource type="PackedScene" uid="uid://chpvwsp4yhf16" path="res://Enemy/explosion.tscn" id="2_vs7qm"]
 [ext_resource type="PackedScene" uid="uid://dn5a2ntclprcp" path="res://Helpers/hitbox.tscn" id="3_4hvib"]
 [ext_resource type="PackedScene" uid="uid://dt1743waxauqe" path="res://Helpers/hurtbox.tscn" id="4_86a0u"]
+[ext_resource type="AudioStream" uid="uid://c7r8y5wixglgi" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_5tahu"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j53se"]
 radius = 5.0
@@ -54,6 +56,7 @@ animation = &"walk"
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_emufy")
+death_explosion_resource = ExtResource("2_vs7qm")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2, -2)
@@ -77,6 +80,12 @@ collision_layer = 2
 
 [node name="Hurtbox" parent="." instance=ExtResource("4_86a0u")]
 collision_mask = 4
+hurtbox_type = "HitOnce"
+
+[node name="EnemyHitSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_5tahu")
+volume_db = -15.0
+pitch_scale = 0.5
 
 [connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
 

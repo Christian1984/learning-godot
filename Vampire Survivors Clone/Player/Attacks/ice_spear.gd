@@ -2,7 +2,7 @@ extends Area2D
 
 class_name IceSpear
 
-@export var hp = 1
+@export var hp = 2
 @export var speed = 100
 @export var level = 1
 @export var damage = 10
@@ -14,6 +14,8 @@ var target_pos = Vector2.ZERO
 var duration = 0
 
 @onready var player = get_tree().get_first_node_in_group("player")
+
+signal remove_from_list(obj: Object)
 
 func _ready():
 	rotation = global_position.angle_to_point(target_pos)
@@ -27,9 +29,11 @@ func _physics_process(delta):
 	duration += delta
 	
 	if duration > ttl:
+		emit_signal("remove_from_list", self)
 		queue_free()
 	
 func enemy_hit(charge = 1):
 	hp -= charge
 	if hp<=0:
+		emit_signal("remove_from_list", self)
 		queue_free()
