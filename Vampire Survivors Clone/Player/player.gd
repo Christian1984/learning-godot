@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var movementSpeed: float = 80
-@export var health: int = 80
+@export var health: int = 100
 
 # Attack Resources
 @export var ice_spear_resource: PackedScene
@@ -16,7 +16,7 @@ extends CharacterBody2D
 @onready var ice_spear_attack_timer: Timer = %IceSpearAttackTimer
 
 var ice_spear_ammo = 0
-var ice_spear_base_ammo = 1
+var ice_spear_base_ammo = 5
 var ice_spear_attack_speed = 1.5
 var ice_spear_level = 1
 var enemies_close: Array[Node2D] = []
@@ -48,7 +48,7 @@ func attack():
 		if ice_spear_timer.is_stopped():
 			ice_spear_timer.start()
 
-func _on_hurtbox_hurt(damage):
+func _on_hurtbox_hurt(damage: int, _knockback: int, _knockback_angle: Vector2):
 	print_debug("_on_hitbox_hurt_character")
 	health -= damage
 	print_debug(health)
