@@ -5,10 +5,13 @@ extends CharacterBody2D
 
 # Attack Resources
 @export var ice_spear_resource: PackedScene
+@export var tornado_resource: PackedScene
 # @onready var ice_spear_resource = load("res://Player/Attacks/ice_spear_resource.tscn")
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_tree: AnimationTree = $AnimationTree
+
+var enemies_close: Array[Node2D] = []
 
 #Attacks
 #Ice Spear
@@ -21,7 +24,15 @@ extends CharacterBody2D
 
 var ice_spear_ammo = 0
 
-var enemies_close: Array[Node2D] = []
+#Tornado
+@onready var tornado_timer: Timer = %TornadoTimer
+@onready var tornado_attack_timer: Timer = %TornadoAttackTimer
+
+@export var tornado_base_ammo = 1
+@export var tornado_attack_speed = 1.5
+@export var tornado_level = 1
+
+var tornado_ammo = 0
 
 func _ready():
 	attack()
@@ -50,17 +61,21 @@ func attack():
 		if ice_spear_timer.is_stopped():
 			ice_spear_timer.start()
 
+	if tornado_level > 0:
+		tornado_timer.wait_time = tornado_attack_speed
+		if tornado_timer.is_stopped():
+			tornado_timer.start()
+
 func _on_hurtbox_hurt(damage: int, _knockback: int, _knockback_angle: Vector2):
 	print_debug("_on_hitbox_hurt_character")
 	health -= damage
 	print_debug(health)
 
-
+#IceSpear Attack Timers
 func _on_ice_spear_timer_timeout():
 	ice_spear_ammo += ice_spear_base_ammo
 	if ice_spear_attack_timer.is_stopped():
 		ice_spear_attack_timer.start()
-
 
 func _on_ice_spear_attack_timer_timeout():
 	if ice_spear_ammo > 0 and not ice_spear_resource ==  null:
@@ -76,6 +91,29 @@ func _on_ice_spear_attack_timer_timeout():
 		ice_spear_ammo -= 1
 	else:
 		ice_spear_attack_timer.stop()
+
+#Tornado Attack Timers
+func _on_tornado_timer_timeout():
+	tornado_ammo += ice_spear_base_ammo
+	if tornado_attack_timer.is_stopped():
+		tornado_attack_timer.start()
+
+
+func _on_tornado_attack_timer_timeout():
+	if tornado_ammo > 0 and not tornado_resource ==  null:
+		var tornado: Tornado = tornado_resource.instantiate()	
+		tornado.position = position
+		tornado.target_pos = get_nearest_enemy()
+		tornado.level = tornado_level
+
+		# get_node("/root/World").add_child(tornado)
+		# get_parent().add_child(tornado)
+		add_child(tornado)
+
+		tornado_ammo -= 1
+	else:
+		tornado_attack_timer.stop()
+
 
 func get_nearest_enemy():
 	if enemies_close.size() > 0:
@@ -93,3 +131,4 @@ func _on_enemy_detector_body_entered(body):
 func _on_enemy_detector_body_exited(body):
 	if enemies_close.has(body):
 		enemies_close.erase(body)
+

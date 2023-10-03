@@ -5,7 +5,7 @@ class_name Attack
 @export var attack_levels: Array[AttackLevelInfo] = []
 
 @export var level = 1
-@export var ttl = 60
+@export var ttl = 15
 
 var attack_info: AttackLevelInfo
 var duration = 0
@@ -13,8 +13,6 @@ var duration = 0
 @onready var player = get_tree().get_first_node_in_group("player")
 
 func _ready():
-	print_debug("Attack")
-	print_debug(attack_levels)
 	if len(attack_levels) == 0:
 		printerr("attack levels not provided")
 		queue_free()
@@ -25,9 +23,21 @@ func _ready():
 	else:
 		attack_info = attack_levels[len(attack_levels) - 1]
 	
-	print_debug(attack_info)
-
 signal remove_from_list(obj: Object)
+
+func _physics_process(delta):
+	duration += delta
+	
+	if duration > ttl:
+		emit_signal("remove_from_list", self)
+		queue_free()
+
+func enemy_hit(charge = 1):
+	if attack_info.hp > 0: # don't remove charges from attacks that start with hp == 0
+		attack_info.hp -= charge
+		if attack_info.hp<=0:
+			emit_signal("remove_from_list", self)
+			queue_free()
 
 func get_damage():
 	return attack_info.damage

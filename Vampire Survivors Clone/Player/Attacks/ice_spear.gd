@@ -6,8 +6,6 @@ var target_pos = Vector2.ZERO
 
 func _ready():
 	super()
-	print_debug("IceSpear")
-	print_debug(attack_info)
 	rotation = global_position.angle_to_point(target_pos)
 
 	var tween = create_tween()
@@ -15,15 +13,5 @@ func _ready():
 	tween.play()
 	
 func _physics_process(delta):
+	super(delta)
 	position += attack_info.speed * delta * transform.x
-	duration += delta
-	
-	if duration > ttl:
-		emit_signal("remove_from_list", self)
-		queue_free()
-	
-func enemy_hit(charge = 1):
-	attack_info.hp -= charge
-	if attack_info.hp<=0:
-		emit_signal("remove_from_list", self)
-		queue_free()

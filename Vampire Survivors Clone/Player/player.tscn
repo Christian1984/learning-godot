@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=12 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
 [ext_resource type="PackedScene" uid="uid://cv2tkni4hsjmu" path="res://Player/Attacks/ice_spear.tscn" id="2_may2d"]
+[ext_resource type="PackedScene" uid="uid://ckaiyywd8hud7" path="res://Player/Attacks/tornado.tscn" id="3_c05gu"]
 [ext_resource type="PackedScene" uid="uid://dt1743waxauqe" path="res://Helpers/hurtbox.tscn" id="3_eqbi5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rt7i1"]
@@ -57,6 +58,7 @@ radius = 367.165
 motion_mode = 1
 script = ExtResource("1_0igou")
 ice_spear_resource = ExtResource("2_may2d")
+tornado_resource = ExtResource("3_c05gu")
 ice_spear_base_ammo = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -81,12 +83,23 @@ anim_player = NodePath("../AnimationPlayer")
 [node name="Hurtbox" parent="." instance=ExtResource("3_eqbi5")]
 collision_mask = 2
 
-[node name="Attack" type="Node" parent="."]
+[node name="Attacks" type="Node" parent="."]
 
-[node name="IceSpearTimer" type="Timer" parent="Attack"]
+[node name="IceSpear" type="Node" parent="Attacks"]
+
+[node name="IceSpearTimer" type="Timer" parent="Attacks/IceSpear"]
 unique_name_in_owner = true
 
-[node name="IceSpearAttackTimer" type="Timer" parent="Attack"]
+[node name="IceSpearAttackTimer" type="Timer" parent="Attacks/IceSpear"]
+unique_name_in_owner = true
+wait_time = 0.075
+
+[node name="Tornado" type="Node" parent="Attacks"]
+
+[node name="TornadoTimer" type="Timer" parent="Attacks/Tornado"]
+unique_name_in_owner = true
+
+[node name="TornadoAttackTimer" type="Timer" parent="Attacks/Tornado"]
 unique_name_in_owner = true
 wait_time = 0.075
 
@@ -99,8 +112,10 @@ monitorable = false
 shape = SubResource("CircleShape2D_7x7wp")
 
 [connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
-[connection signal="timeout" from="Attack/IceSpearTimer" to="." method="_on_ice_spear_timer_timeout"]
-[connection signal="timeout" from="Attack/IceSpearAttackTimer" to="." method="_on_ice_spear_attack_timer_timeout"]
+[connection signal="timeout" from="Attacks/IceSpear/IceSpearTimer" to="." method="_on_ice_spear_timer_timeout"]
+[connection signal="timeout" from="Attacks/IceSpear/IceSpearAttackTimer" to="." method="_on_ice_spear_attack_timer_timeout"]
+[connection signal="timeout" from="Attacks/Tornado/TornadoTimer" to="." method="_on_tornado_timer_timeout"]
+[connection signal="timeout" from="Attacks/Tornado/TornadoAttackTimer" to="." method="_on_tornado_attack_timer_timeout"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_enemy_detector_body_entered"]
 [connection signal="body_exited" from="EnemyDetector" to="." method="_on_enemy_detector_body_exited"]
 
