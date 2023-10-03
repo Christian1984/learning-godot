@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckaiyywd8hud7"]
+
+[ext_resource type="Texture2D" uid="uid://c7cpfq31lfxx4" path="res://Textures/Items/Weapons/tornado.png" id="1_8t15o"]
+[ext_resource type="Script" path="res://Player/Attacks/tornado.gd" id="1_v53k1"]
+[ext_resource type="Script" path="res://Player/Attacks/attack_level_info.gd" id="2_6lxtb"]
+[ext_resource type="AudioStream" uid="uid://dlexga8hpjnns" path="res://Audio/SoundEffect/tornado.ogg" id="3_1jr52"]
+
+[sub_resource type="Resource" id="Resource_xgin6"]
+script = ExtResource("2_6lxtb")
+hp = 0
+speed = 100
+damage = 10
+knockback = 100
+attack_size = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j8t1k"]
+radius = 7.0
+height = 24.0
+
+[node name="Tornado" type="Area2D" groups=["attack"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_v53k1")
+attack_levels = Array[ExtResource("2_6lxtb")]([SubResource("Resource_xgin6")])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_8t15o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_j8t1k")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_1jr52")
+volume_db = -10.0

@@ -15,10 +15,12 @@ extends CharacterBody2D
 @onready var ice_spear_timer: Timer = %IceSpearTimer
 @onready var ice_spear_attack_timer: Timer = %IceSpearAttackTimer
 
+@export var ice_spear_base_ammo = 1
+@export var ice_spear_attack_speed = 1.5
+@export var ice_spear_level = 1
+
 var ice_spear_ammo = 0
-var ice_spear_base_ammo = 1
-var ice_spear_attack_speed = 1.5
-var ice_spear_level = 1
+
 var enemies_close: Array[Node2D] = []
 
 func _ready():

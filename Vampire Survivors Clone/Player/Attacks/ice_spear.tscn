@@ -1,8 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://cv2tkni4hsjmu"]
+[gd_scene load_steps=7 format=3 uid="uid://cv2tkni4hsjmu"]
 
 [ext_resource type="Script" path="res://Player/Attacks/ice_spear.gd" id="1_djtx5"]
 [ext_resource type="Texture2D" uid="uid://ci3bhxde0cib5" path="res://Textures/Items/Weapons/ice_spear.png" id="1_olgt0"]
+[ext_resource type="Script" path="res://Player/Attacks/attack_level_info.gd" id="2_ga2ky"]
 [ext_resource type="AudioStream" uid="uid://c68diiyuwkb2m" path="res://Audio/SoundEffect/ice.wav" id="3_ho02d"]
+
+[sub_resource type="Resource" id="Resource_op4r8"]
+script = ExtResource("2_ga2ky")
+hp = 2
+speed = 100
+damage = 10
+knockback = 100
+attack_size = 1.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6avlg"]
 radius = 3.0
@@ -14,6 +23,7 @@ scale = Vector2(0.1, 0.1)
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_djtx5")
+attack_levels = Array[ExtResource("2_ga2ky")]([SubResource("Resource_op4r8")])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(17, -1)

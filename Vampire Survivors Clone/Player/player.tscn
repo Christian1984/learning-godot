@@ -57,6 +57,7 @@ radius = 367.165
 motion_mode = 1
 script = ExtResource("1_0igou")
 ice_spear_resource = ExtResource("2_may2d")
+ice_spear_base_ammo = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2, -1)

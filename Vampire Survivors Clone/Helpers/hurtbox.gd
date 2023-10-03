@@ -28,14 +28,16 @@ func _on_area_entered(area: Area2D):
 			else:
 				return
 	
+
 	var knockback_angle = area.transform.x as Vector2
-	var knockback = area.get("knockback")
-	if knockback == null:
-		knockback = 1
+	var damage = 0
+	var knockback = 0
+
+	if area.has_method("get_knockback"):
+		knockback = area.get_knockback()
 	
-	var damage = area.get("damage")
-	if damage == null:
-		damage = 0
+	if area.has_method("get_damage"):
+		damage = area.get_damage()
 
 	emit_signal("hurt", damage, knockback, knockback_angle)
 	
