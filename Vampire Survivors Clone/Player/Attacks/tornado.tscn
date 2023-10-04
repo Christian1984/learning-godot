@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_xgin6"]
 script = ExtResource("2_6lxtb")
 hp = 0
-speed = 100
+speed = 60
 damage = 10
 knockback = 100
 attack_size = 1.0
@@ -34,3 +34,4 @@ shape = SubResource("CapsuleShape2D_j8t1k")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_1jr52")
 volume_db = -10.0
+autoplay = true

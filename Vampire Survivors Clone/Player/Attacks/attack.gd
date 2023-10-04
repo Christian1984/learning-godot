@@ -9,6 +9,7 @@ class_name Attack
 
 var attack_info: AttackLevelInfo
 var duration = 0
+var direction = Vector2.ZERO
 
 @onready var player = get_tree().get_first_node_in_group("player")
 

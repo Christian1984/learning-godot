@@ -6,7 +6,8 @@ var target_pos = Vector2.ZERO
 
 func _ready():
 	super()
-	rotation = global_position.angle_to_point(target_pos)
+	# rotation = global_position.angle_to_point(target_pos)
+	rotation = direction.angle()
 
 	var tween = create_tween()
 	tween.tween_property(self, "scale", attack_info.attack_size * Vector2.ONE, 1).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)

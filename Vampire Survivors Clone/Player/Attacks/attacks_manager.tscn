@@ -24,7 +24,9 @@ attack_resource = ExtResource("2_ua3hf")
 base_ammo = 3
 
 [node name="Tornado" parent="." instance=ExtResource("1_i4aj4")]
+launch_type = "Random Direction"
 attack_resource = ExtResource("4_r7mls")
+base_ammo = 2
 
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_enemy_detector_body_entered"]
 [connection signal="body_exited" from="EnemyDetector" to="." method="_on_enemy_detector_body_exited"]
