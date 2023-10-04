@@ -1,11 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://b3tlv7nbouftf"]
+[gd_scene load_steps=10 format=3 uid="uid://b3tlv7nbouftf"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_0igou"]
 [ext_resource type="Texture2D" uid="uid://b8202a2ceoftm" path="res://Textures/Player/player_sprite.png" id="1_8v2pj"]
-[ext_resource type="PackedScene" uid="uid://cv2tkni4hsjmu" path="res://Player/Attacks/ice_spear.tscn" id="2_may2d"]
-[ext_resource type="PackedScene" uid="uid://ckaiyywd8hud7" path="res://Player/Attacks/tornado.tscn" id="3_c05gu"]
 [ext_resource type="PackedScene" uid="uid://dt1743waxauqe" path="res://Helpers/hurtbox.tscn" id="3_eqbi5"]
-[ext_resource type="PackedScene" uid="uid://86woqvmxh1p5" path="res://Player/Attacks/attack_launcher.tscn" id="6_1lnho"]
+[ext_resource type="PackedScene" uid="uid://evxa7eejwjdt" path="res://Player/Attacks/attacks_manager.tscn" id="5_7f7k2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rt7i1"]
 radius = 5.0
@@ -52,13 +50,9 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a3wdl"]
 animation = &"walk"
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7x7wp"]
-radius = 367.165
-
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 motion_mode = 1
 script = ExtResource("1_0igou")
-tornado_resource = ExtResource("3_c05gu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2, -1)
@@ -82,32 +76,8 @@ anim_player = NodePath("../AnimationPlayer")
 [node name="Hurtbox" parent="." instance=ExtResource("3_eqbi5")]
 collision_mask = 2
 
-[node name="Attacks" type="Node" parent="."]
-
-[node name="IceSpear" parent="Attacks" instance=ExtResource("6_1lnho")]
-attack_resource = ExtResource("2_may2d")
-
-[node name="Tornado" type="Node" parent="Attacks"]
-
-[node name="TornadoTimer" type="Timer" parent="Attacks/Tornado"]
-unique_name_in_owner = true
-
-[node name="TornadoAttackTimer" type="Timer" parent="Attacks/Tornado"]
-unique_name_in_owner = true
-wait_time = 0.075
-
-[node name="EnemyDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 4
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetector"]
-shape = SubResource("CircleShape2D_7x7wp")
+[node name="AttacksManager" parent="." instance=ExtResource("5_7f7k2")]
 
 [connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
-[connection signal="timeout" from="Attacks/Tornado/TornadoTimer" to="." method="_on_tornado_timer_timeout"]
-[connection signal="timeout" from="Attacks/Tornado/TornadoAttackTimer" to="." method="_on_tornado_attack_timer_timeout"]
-[connection signal="body_entered" from="EnemyDetector" to="." method="_on_enemy_detector_body_entered"]
-[connection signal="body_exited" from="EnemyDetector" to="." method="_on_enemy_detector_body_exited"]
 
 [editable path="Hurtbox"]

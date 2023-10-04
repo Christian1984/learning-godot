@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Player/Attacks/attack_launcher.gd" id="1_dne40"]
 
-[node name="AttackLauncher" type="Node"]
+[node name="AttackLauncher" type="Node2D"]
 script = ExtResource("1_dne40")
 
 [node name="CooldownTimer" type="Timer" parent="."]
@@ -12,5 +12,5 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 wait_time = 0.075
 
-[connection signal="timeout" from="CooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
-[connection signal="timeout" from="LaunchTimer" to="." method="_on_attack_launch_timer_timeout"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
+[connection signal="timeout" from="LaunchTimer" to="." method="_on_launch_timer_timeout"]
