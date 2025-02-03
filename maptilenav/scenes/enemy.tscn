@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://0el4jw5m3xhb"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_6d4xw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fukyv"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_08wvh"]
+material = SubResource("StandardMaterial3D_fukyv")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qom5b"]
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_6d4xw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
+mesh = SubResource("CapsuleMesh_08wvh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 2, 0)
+shape = SubResource("CapsuleShape3D_qom5b")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.5
+debug_enabled = true
