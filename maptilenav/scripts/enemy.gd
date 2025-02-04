@@ -42,12 +42,12 @@ func _physics_process(delta: float):
 			if nav.is_target_reachable():
 				velocity = velocity.move_toward((next_location - global_position).normalized() * SPEED, ACCELERATION)
 			else:
-				print("Target is NOT reachable!")
+			#	print("Target is NOT reachable!")
 				velocity = velocity.move_toward(Vector3.ZERO, ACCELERATION)
 		else:
 			velocity = Vector3.ZERO
 		
-		print("velocity: " + str(velocity.length()) + ", index: " + str(nav.get_current_navigation_path_index()))
+		#print("velocity: " + str(velocity.length()) + ", index: " + str(nav.get_current_navigation_path_index()))
 		
 
 
