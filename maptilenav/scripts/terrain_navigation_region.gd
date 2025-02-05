@@ -1,13 +1,13 @@
 extends NavigationRegion3D
 
 @onready var timer: Timer = $Timer
+@onready var terrain: GridMap = $Terrain
 
 func _on_timer_timeout():
 	timer.stop()
-	bake_navigation_mesh(true)
 	
-func _on_navigation_mesh_changed() -> void:
-	print("navmesh changed")
+	var thread = Thread.new()
+	thread.start(update_nav_mesh.bind(terrain))
 
 func sum(accum, number):
 	return accum + number
@@ -15,19 +15,20 @@ func sum(accum, number):
 func create_combined_cube_mesh(gridmap: GridMap) -> ArrayMesh:
 	print("Create combined cube mesh...")
 	var start = Time.get_ticks_msec()
-	
 	var array_mesh = ArrayMesh.new()
 	var box_mesh = BoxMesh.new()
-	box_mesh.size = Vector3(2, 2, 2)  # Match GridMap cell size
+	box_mesh.size = gridmap.cell_size
 
-	var arrays = box_mesh.surface_get_arrays(0)  # Get cube mesh data
-	var vertices = arrays[Mesh.ARRAY_VERTEX]  # Cube vertices
-	var indices = arrays[Mesh.ARRAY_INDEX]  # Cube indices
-
-	var mesh_data = []
-	mesh_data.resize(Mesh.ARRAY_MAX)
-	mesh_data[Mesh.ARRAY_VERTEX] = []
-	mesh_data[Mesh.ARRAY_INDEX] = []
+	var box_arrays = box_mesh.surface_get_arrays(0)
+	var box_vertices = box_arrays[Mesh.ARRAY_VERTEX]
+	var box_uvs = box_arrays[Mesh.ARRAY_TEX_UV]
+	var box_indices = box_arrays[Mesh.ARRAY_INDEX]
+	var box_normals = box_arrays[Mesh.ARRAY_NORMAL]
+	
+	var verts = PackedVector3Array()
+	var uvs = PackedVector2Array()
+	var normals = PackedVector3Array()
+	var indices = PackedInt32Array()
 
 	var vertex_offset = 0
 	var cell_times = []
@@ -36,16 +37,30 @@ func create_combined_cube_mesh(gridmap: GridMap) -> ArrayMesh:
 		var cell_start = Time.get_ticks_msec()
 		
 		var transform = gridmap.map_to_local(cell)
-		for v in vertices:
-			mesh_data[Mesh.ARRAY_VERTEX].append(v + transform)  # Offset vertices
+		for v in box_vertices:
+			verts.append(v + transform)
+			
+		for uv in box_uvs:
+			uvs.append(uv)
+			
+		for normal in box_normals:
+			normals.append(normal)
 
-		for i in indices:
-			mesh_data[Mesh.ARRAY_INDEX].append(i + vertex_offset)  # Offset indices
+		for i in box_indices:
+			indices.append(i + vertex_offset)
 
-		vertex_offset += vertices.size()
+		vertex_offset += box_vertices.size()
 		
 		cell_times.append(Time.get_ticks_msec() - cell_start)
 
+	var mesh_data = []
+	mesh_data.resize(Mesh.ARRAY_MAX)
+	mesh_data[Mesh.ARRAY_VERTEX] = verts
+	mesh_data[Mesh.ARRAY_TEX_UV] = uvs
+	mesh_data[Mesh.ARRAY_INDEX] = indices
+	mesh_data[Mesh.ARRAY_NORMAL] = normals
+
+	
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_data)
 	var res = array_mesh if mesh_data[Mesh.ARRAY_VERTEX].size() > 0 else null
 	
@@ -60,28 +75,10 @@ func extract_gridmap_geometry(gridmap: GridMap) -> NavigationMeshSourceGeometryD
 	var start = Time.get_ticks_msec()
 	
 	var navmesh_data = NavigationMeshSourceGeometryData3D.new()
-	#var mesh = create_combined_cube_mesh(gridmap)
+	var mesh = create_combined_cube_mesh(gridmap)
 	
-	#if mesh:
-	#	print("mesh not null")
-	#	navmesh_data.add_mesh(mesh, Transform3D.IDENTITY)
-	
-	var mesh_library = gridmap.mesh_library
-	if not mesh_library:
-		return navmesh_data
-	
-	var cell_times = []
-	for cell in gridmap.get_used_cells():
-		
-		var item_id = gridmap.get_cell_item(cell)
-		if item_id == GridMap.INVALID_CELL_ITEM:
-			continue
-		var mesh = mesh_library.get_item_mesh(item_id)
-		
-		if mesh:
-			var transform = gridmap.map_to_local(cell)
-			var mesh_transform = Transform3D(Basis(), transform)
-			navmesh_data.add_mesh(mesh, mesh_transform)
+	if mesh:
+		navmesh_data.add_mesh(mesh, Transform3D.IDENTITY)
 
 	print("Extracting geometry done, took " + str(Time.get_ticks_msec() - start) + "ms")
 	return navmesh_data
@@ -102,7 +99,4 @@ func update_nav_mesh(gridmap: GridMap):
 	
 
 func terrain_updated(gridmap: GridMap):
-	var thread = Thread.new()
-	thread.start(update_nav_mesh.bind(gridmap))
-	
-	#timer.start()
+	timer.start()

@@ -70,5 +70,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4, 16)
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 3, 0)
 mesh = SubResource("PlaneMesh_bbi8d")
 
-[connection signal="navigation_mesh_changed" from="TerrainNavigationRegion" to="TerrainNavigationRegion" method="_on_navigation_mesh_changed"]
 [connection signal="timeout" from="TerrainNavigationRegion/Timer" to="TerrainNavigationRegion" method="_on_timer_timeout"]
