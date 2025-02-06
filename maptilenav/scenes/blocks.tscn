@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://cvc4vt5brlwci"]
+[gd_scene load_steps=33 format=4 uid="uid://cvc4vt5brlwci"]
 
 [ext_resource type="Texture2D" uid="uid://ck62k3fqtk1re" path="res://models/blocks/flat/Block_Dirt_Atlas.png" id="1_gu62e"]
 [ext_resource type="Texture2D" uid="uid://rk0q21l0gq76" path="res://models/blocks/flat/Block_Grass_Atlas.png" id="2_jk3vg"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://cw5xc84h5yrd7" path="res://models/blocks/pixels/Dirt_Blocks_PixelArt.png" id="5_28ib6"]
 [ext_resource type="Texture2D" uid="uid://b0cd10stk2xly" path="res://models/blocks/pixels/Grass_Blocks_PixelArt.png" id="6_lc7pd"]
 [ext_resource type="Texture2D" uid="uid://l7dwtapym8pc" path="res://models/blocks/pixels/WoodPlanks_Blocks_PixelArt.png" id="7_wtgs1"]
-[ext_resource type="Texture2D" uid="uid://dwnvhb2tkrcqw" path="res://models/blocks/pixels/Bricks_Grey_Blocks_PixelArt.png" id="8_1h8rc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nybyf"]
 resource_name = "Blocks_Pixelart"
@@ -126,11 +125,8 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_q2s3l")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inlqv"]
-resource_name = "Blocks_Pixelart"
-cull_mode = 2
-albedo_texture = ExtResource("8_1h8rc")
-texture_filter = 2
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hh115"]
+albedo_color = Color(0, 0.603922, 1, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mchfe"]
 _surfaces = [{
@@ -154,7 +150,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 36,
 "index_data": PackedByteArray("AgAKAAUAAgAHAAoACAAXAAsACAAUABcAEgAQABUAEgANABAADAADAA8ADAAAAAMABgAOABMABgABAA4AFgAEAAkAFgARAAQA"),
-"material": SubResource("StandardMaterial3D_inlqv"),
+"material": SubResource("StandardMaterial3D_hh115"),
 "name": "Blocks_Pixelart",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -364,6 +360,17 @@ skeleton = NodePath("")
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PixelBricks/StaticBody3D"]
+shape = SubResource("BoxShape3D_6qcgk")
+
+[node name="PixelBricks2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+mesh = SubResource("ArrayMesh_smiv6")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PixelBricks2"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PixelBricks2/StaticBody3D"]
 shape = SubResource("BoxShape3D_6qcgk")
 
 [node name="ZGrass" type="MeshInstance3D" parent="."]

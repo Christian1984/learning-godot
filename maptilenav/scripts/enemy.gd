@@ -11,15 +11,17 @@ const JUMP_VELOCITY = 20
 
 var do_nav = true
 
+func _on_set_debug_navigation_active(active: bool):
+	print("nav active: ", active)
+	do_nav = active
 
 func _ready():
+	DebugTools.set_debug_navigation_active.connect(_on_set_debug_navigation_active)
+	do_nav = DebugTools.debug_nav_active
+	
 	if (target):
 		print("target found: " + str(target.global_position))
 		nav.target_position = target.global_position
-		
-func _process(delta: float):
-	if Input.is_action_just_pressed("pause_nav"):
-		do_nav = not do_nav
 
 func _physics_process(delta: float):
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -39,17 +41,13 @@ func _physics_process(delta: float):
 	
 	if not direction:
 		if do_nav:
-			if nav.is_target_reachable():
-				velocity = velocity.move_toward((next_location - global_position).normalized() * SPEED, ACCELERATION)
-			else:
-			#	print("Target is NOT reachable!")
-				velocity = velocity.move_toward(Vector3.ZERO, ACCELERATION)
+			#print(nav.is_target_reachable())
+			velocity = velocity.move_toward((next_location - global_position).normalized() * SPEED, ACCELERATION)
+			#else:
+				#print("Target is NOT reachable!")
+				#velocity = velocity.move_toward(Vector3.ZERO, ACCELERATION)
 		else:
 			velocity = Vector3.ZERO
 		
-		#print("velocity: " + str(velocity.length()) + ", index: " + str(nav.get_current_navigation_path_index()))
-		
-
-
 	DrawDebug.draw_vector(global_position, velocity, Color.BLUE)
 	move_and_slide()

@@ -4,20 +4,22 @@
 [ext_resource type="MeshLibrary" uid="uid://ceu060q35imi1" path="res://resources/blocks.tres" id="2_lk061"]
 [ext_resource type="Script" path="res://scripts/terrain.gd" id="3_7emg5"]
 
-[sub_resource type="NavigationMesh" id="NavigationMesh_kcqkw"]
-agent_height = 4.0
-agent_radius = 1.0
-agent_max_climb = 2.1
+[sub_resource type="NavigationMesh" id="NavigationMesh_2ia1i"]
 
 [node name="TerrainNavigationRegion" type="NavigationRegion3D"]
-navigation_mesh = SubResource("NavigationMesh_kcqkw")
+navigation_mesh = SubResource("NavigationMesh_2ia1i")
 script = ExtResource("1_14lh2")
+
+[node name="RegenrateNavMeshTimer" type="Timer" parent="."]
 
 [node name="Terrain" type="GridMap" parent="."]
 mesh_library = ExtResource("2_lk061")
 script = ExtResource("3_7emg5")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Timer" type="Timer" parent="."]
+[node name="InitialTerrainChangedSignalTimer" type="Timer" parent="Terrain"]
+one_shot = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="RegenrateNavMeshTimer" to="." method="_on_timer_timeout"]
+[connection signal="terrain_changed" from="Terrain" to="." method="_on_terrain_terrain_changed"]
+[connection signal="timeout" from="Terrain/InitialTerrainChangedSignalTimer" to="Terrain" method="_on_initial_terrain_changed_signal_timer_timeout"]

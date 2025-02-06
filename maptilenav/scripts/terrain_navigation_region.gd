@@ -1,6 +1,6 @@
 extends NavigationRegion3D
 
-@onready var timer: Timer = $Timer
+@onready var timer: Timer = $RegenrateNavMeshTimer
 @onready var terrain: GridMap = $Terrain
 
 func _on_timer_timeout():
@@ -84,6 +84,7 @@ func extract_gridmap_geometry(gridmap: GridMap) -> NavigationMeshSourceGeometryD
 
 func apply_navmesh(navmesh: NavigationMesh):
 	navigation_mesh = navmesh
+	print("me: ", name, ", terrain: ", terrain.name,", get_region_rid(): ", get_region_rid(), ", navmesh.get_instance_id(): ", navmesh.get_instance_id(), ", get_navigation_map(): ", get_navigation_map())
 
 func update_nav_mesh(gridmap: GridMap):
 	print("Updating the nav mesh...")
@@ -97,5 +98,5 @@ func update_nav_mesh(gridmap: GridMap):
 	print("Updating nav mesh done, took " + str(Time.get_ticks_msec() - start) + "ms")
 	
 
-func terrain_updated(gridmap: GridMap):
+func _on_terrain_terrain_changed(gridmap: GridMap):
 	timer.start()
