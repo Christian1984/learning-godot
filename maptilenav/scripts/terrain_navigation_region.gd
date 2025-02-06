@@ -60,7 +60,6 @@ func create_combined_cube_mesh(gridmap: GridMap) -> ArrayMesh:
 	mesh_data[Mesh.ARRAY_INDEX] = indices
 	mesh_data[Mesh.ARRAY_NORMAL] = normals
 
-	
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_data)
 	var res = array_mesh if mesh_data[Mesh.ARRAY_VERTEX].size() > 0 else null
 	
