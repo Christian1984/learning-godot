@@ -5,6 +5,9 @@
 [ext_resource type="Script" path="res://scripts/terrain.gd" id="3_7emg5"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_2ia1i"]
+agent_height = 4.0
+agent_radius = 1.0
+agent_max_climb = 2.1
 
 [node name="TerrainNavigationRegion" type="NavigationRegion3D"]
 navigation_mesh = SubResource("NavigationMesh_2ia1i")

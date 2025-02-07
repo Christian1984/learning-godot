@@ -9,6 +9,15 @@ func _on_timer_timeout():
 	var thread = Thread.new()
 	thread.start(update_nav_mesh.bind(terrain))
 
+func _on_terrain_terrain_changed(gridmap: GridMap):
+	timer.start()
+
+func _ready():
+	navigation_mesh = NavigationMesh.new()
+	navigation_mesh.agent_height = 4.0
+	navigation_mesh.agent_max_climb = 3
+	navigation_mesh.agent_radius = 1
+
 func sum(accum, number):
 	return accum + number
 
@@ -96,7 +105,3 @@ func update_nav_mesh(gridmap: GridMap):
 	call_deferred("apply_navmesh", navigation_mesh)
 	
 	print("Updating nav mesh done, took " + str(Time.get_ticks_msec() - start) + "ms")
-	
-
-func _on_terrain_terrain_changed(gridmap: GridMap):
-	timer.start()
