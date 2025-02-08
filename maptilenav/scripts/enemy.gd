@@ -1,16 +1,21 @@
 extends CharacterBody3D
 
-@export var health = 10.0
+@export var health: float = 10.0
 
 @onready var target: Node3D = $"/root/Map/Target"
 @onready var player: Node3D = $"/root/Map/Player"
 
-const SPEED = 5.0
-const ACCELERATION = 0.2
-const JUMP_VELOCITY = 20
+@onready var health_bar: ProgressBar = $HealthBarViewport/HealthBar
+@onready var health_bar_sprite_3d: Sprite3D = $HealthBarSprite3D
 
 @onready var nav = $NavigationAgent3D
 @onready var restart_navigation_timer: Timer = $RestartNavigationTimer
+
+@onready var max_health = health
+
+const SPEED = 5.0
+const ACCELERATION = 0.2
+const JUMP_VELOCITY = 20
 
 var do_nav = true
 
@@ -26,6 +31,8 @@ func _ready():
 	if (target):
 		print("target found: " + str(target.global_position))
 		nav.target_position = target.global_position
+		
+	update_health_bar()
 
 func _physics_process(delta: float):
 	for collision_id in range(get_slide_collision_count()):
@@ -81,8 +88,18 @@ func _on_navigation_agent_3d_navigation_finished():
 func die():
 	queue_free()
 
+func update_health_bar():
+	if health_bar:
+		var v = clamp(health / max_health, 0, 1) * 100
+		print(v)
+		health_bar.value = clamp(health / max_health, 0, 1) * 100
+		
+		if health_bar_sprite_3d:
+			health_bar_sprite_3d.visible = health < max_health
+
 func take_damage(damage: float):
 	health -= damage
+	update_health_bar()
 	print("take damage: ", damage, ", health: ", health)
-	if health < 0:
+	if health <= 0:
 		die()
