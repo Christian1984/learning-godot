@@ -11,6 +11,14 @@ func _on_timer_timeout():
 
 func _on_terrain_terrain_changed(gridmap: GridMap):
 	timer.start()
+	var maps = NavigationServer3D.get_maps()
+	if maps:
+		for map in maps:
+			var regions = NavigationServer3D.map_get_regions(map)
+			var agents = NavigationServer3D.map_get_agents(map)
+			print("regions: ", regions)
+			print("agents: ", agents)
+			
 
 func _ready():
 	navigation_mesh = NavigationMesh.new()

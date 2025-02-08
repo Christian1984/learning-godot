@@ -1,0 +1,66 @@
+[gd_scene load_steps=13 format=3 uid="uid://beid8mnox8urj"]
+
+[ext_resource type="PackedScene" uid="uid://0el4jw5m3xhb" path="res://scenes/enemy.tscn" id="4_0sw8r"]
+[ext_resource type="PackedScene" uid="uid://oyqfinkdy8ux" path="res://scenes/padlock.tscn" id="4_668ep"]
+[ext_resource type="PackedScene" uid="uid://dxni4gc4vkmn0" path="res://scenes/player.tscn" id="5_auimr"]
+[ext_resource type="PackedScene" uid="uid://ri8mcbvcqf5s" path="res://scenes/turret.tscn" id="5_o3358"]
+[ext_resource type="PackedScene" uid="uid://cvc4vt5brlwci" path="res://scenes/blocks.tscn" id="6_alf61"]
+[ext_resource type="PackedScene" uid="uid://sotsdqpk375h" path="res://scenes/target.tscn" id="6_eioyj"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_enr7x"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_4i5ij"]
+sky_material = SubResource("ProceduralSkyMaterial_enr7x")
+
+[sub_resource type="Environment" id="Environment_nvxeu"]
+background_mode = 2
+sky = SubResource("Sky_4i5ij")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_kyksy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r3b36"]
+albedo_color = Color(5.17406e-07, 0.312286, 3.36915e-07, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7o5pj"]
+material = SubResource("StandardMaterial3D_r3b36")
+
+[node name="Map" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nvxeu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Enemy" parent="." instance=ExtResource("4_0sw8r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.19494, 0, 75.0514)
+
+[node name="Player" parent="." instance=ExtResource("5_auimr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.2813, 0, -0.078228)
+
+[node name="Target" parent="." instance=ExtResource("6_eioyj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 16)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("HeightMapShape3D_kyksy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_7o5pj")
+
+[node name="Turret" parent="." instance=ExtResource("5_o3358")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -10)
+
+[node name="Blocks" parent="." instance=ExtResource("6_alf61")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, -20)
+
+[node name="Padlock" parent="." instance=ExtResource("4_668ep")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5, 2.5, 0)

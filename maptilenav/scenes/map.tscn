@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://bnrukh4fsn2of"]
 
-[ext_resource type="Script" path="res://scripts/terrain_navigation_region.gd" id="1_g8hgm"]
+[ext_resource type="Script" path="res://scripts/chunk_navigation_region.gd" id="1_g8hgm"]
 [ext_resource type="MeshLibrary" uid="uid://ceu060q35imi1" path="res://resources/blocks.tres" id="1_hrycd"]
 [ext_resource type="PackedScene" uid="uid://0el4jw5m3xhb" path="res://scenes/enemy.tscn" id="2_encfx"]
-[ext_resource type="Script" path="res://scripts/terrain.gd" id="2_w2u66"]
+[ext_resource type="Script" path="res://scripts/chunk_terrain.gd" id="2_w2u66"]
 [ext_resource type="PackedScene" uid="uid://sotsdqpk375h" path="res://scenes/target.tscn" id="3_jp7dq"]
 [ext_resource type="PackedScene" uid="uid://dxni4gc4vkmn0" path="res://scenes/player.tscn" id="4_bjd25"]
 

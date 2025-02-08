@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://ri8mcbvcqf5s"]
+
+[ext_resource type="ArrayMesh" uid="uid://dmvclakpde78v" path="res://models/small turret 2.obj" id="1_cxwg5"]
+[ext_resource type="Script" path="res://scripts/turret.gd" id="1_emuic"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2ig6u"]
+radius = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8prvc"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fxwm3"]
+material = SubResource("StandardMaterial3D_8prvc")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_oaxeu"]
+height = 1.7
+radius = 1.0
+
+[node name="Turret" type="Node3D"]
+script = ExtResource("1_emuic")
+
+[node name="Detector" type="Area3D" parent="."]
+
+[node name="DetectorCollisionShape3D" type="CollisionShape3D" parent="Detector"]
+shape = SubResource("SphereShape3D_2ig6u")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, 0)
+
+[node name="MissileSpawnPosition" type="Node3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.475, 0.9)
+
+[node name="Turret" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -0.072, 1, 0.215)
+mesh = ExtResource("1_cxwg5")
+skeleton = NodePath("../..")
+
+[node name="Base" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 0.5, 0, 0, 0, 2, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_fxwm3")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CylinderShape3D_oaxeu")
+
+[node name="FireTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]
+[connection signal="body_exited" from="Detector" to="." method="_on_detector_body_exited"]
+[connection signal="timeout" from="FireTimer" to="." method="_on_fire_timer_timeout"]

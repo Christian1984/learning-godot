@@ -1,24 +1,44 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgg5gxwuwwdgc"]
+[gd_scene load_steps=7 format=3 uid="uid://bgg5gxwuwwdgc"]
 
 [ext_resource type="Script" path="res://scripts/spawner.gd" id="1_lxdim"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sx60q"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sro61"]
 albedo_color = Color(1, 0, 0.490196, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4p50a"]
-material = SubResource("StandardMaterial3D_sx60q")
+material = SubResource("StandardMaterial3D_sro61")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbx2c"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_khy1x"]
+material = SubResource("StandardMaterial3D_tbx2c")
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bt2sw"]
+height = 0.2
+radius = 1.0
 
-[node name="Spawner" type="StaticBody3D"]
+[node name="Spawner" type="Node3D"]
 script = ExtResource("1_lxdim")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
-mesh = SubResource("CylinderMesh_4p50a")
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 2, 0)
+[node name="SpawnPosition" type="Node3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+
+[node name="SpawnerTop" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 0.05, 0, 0, 0, 2, 0, 0.15, 0)
+mesh = SubResource("CylinderMesh_4p50a")
+skeleton = NodePath("../..")
+
+[node name="SpawnerBottom" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 0.1, 0, 0, 0, 2, 0, 0.05, 0)
+mesh = SubResource("BoxMesh_khy1x")
+skeleton = NodePath("../SpawnerTop")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CylinderShape3D_bt2sw")
 
 [node name="Timer" type="Timer" parent="."]

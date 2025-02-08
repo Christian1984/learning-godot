@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-@onready var navigation_region_3d: NavigationRegion3D = $"/root/Map/NavigationRegion3D"
 @onready var target: Node3D = $"/root/Map/Target"
 
 const SPEED = 15.0
@@ -10,7 +9,7 @@ const FPS_MOUSE_SENSITIVITY = 0.005
 @onready var cam = $Camera3D
 @onready var ray: RayCast3D = $Camera3D/RayCast3D
 
-var flying = false
+@export var flying = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -21,23 +20,15 @@ func _unhandled_input(event):
 		rotation.y -= event.relative.x * FPS_MOUSE_SENSITIVITY
 		cam.rotation.x = clamp(cam.rotation.x - event.relative.y * FPS_MOUSE_SENSITIVITY, -PI / 2, PI / 2)
 
-func eval_nav():
-	if not navigation_region_3d:
-		return
+func eval_nav():	
+	var nav_maps = NavigationServer3D.get_maps()
+	for nav_map in nav_maps:
+		var path = NavigationServer3D.map_get_path(nav_map, global_position, target.global_position, false)
 	
-	var nav_map = navigation_region_3d.get_navigation_map()
-	var path = NavigationServer3D.map_get_path(nav_map, global_position, target.global_position, false)
-	
-	if path.size() > 1:
-		DrawDebug.draw_line(global_position, path[-1], Color.WHITE)
-		for i in path.size() - 1:
-			DrawDebug.draw_line(path[i], path[i + 1], Color.AQUA)
-		#if target.global_position.distance_to(path[-1]) < 1:
-		#	print("Path to target is valid!")
-		#else:
-		#	print("Path to target is NOT valid!")
-	#else:
-	#	print("NO Path exists!")
+		if path.size() > 1:
+			DrawDebug.draw_line(global_position, path[-1], Color.WHITE)
+			for i in path.size() - 1:
+				DrawDebug.draw_line(path[i], path[i + 1], Color.AQUA)
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("toggle_flight"):

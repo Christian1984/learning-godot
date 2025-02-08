@@ -1,28 +1,32 @@
-[gd_scene load_steps=5 format=3 uid="uid://0nah0iw4vlq1"]
+[gd_scene load_steps=6 format=3 uid="uid://dikhue3n4n4cp"]
 
-[ext_resource type="Script" path="res://scripts/terrain_navigation_region.gd" id="1_14lh2"]
+[ext_resource type="Script" path="res://scripts/chunk_navigation_region.gd" id="1_14lh2"]
 [ext_resource type="MeshLibrary" uid="uid://ceu060q35imi1" path="res://resources/blocks.tres" id="2_lk061"]
-[ext_resource type="Script" path="res://scripts/terrain.gd" id="3_7emg5"]
+[ext_resource type="Script" path="res://scripts/chunk.gd" id="3_7emg5"]
+[ext_resource type="Script" path="res://scripts/chunk_terrain.gd" id="4_5xvs4"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_2ia1i"]
 agent_height = 4.0
 agent_radius = 1.0
 agent_max_climb = 2.1
 
-[node name="TerrainNavigationRegion" type="NavigationRegion3D"]
+[node name="Chunk" type="Node3D"]
+script = ExtResource("3_7emg5")
+
+[node name="TerrainNavigationRegion" type="NavigationRegion3D" parent="." groups=["navigation_regions"]]
 navigation_mesh = SubResource("NavigationMesh_2ia1i")
 script = ExtResource("1_14lh2")
 
-[node name="RegenrateNavMeshTimer" type="Timer" parent="."]
+[node name="RegenrateNavMeshTimer" type="Timer" parent="TerrainNavigationRegion"]
 
-[node name="Terrain" type="GridMap" parent="."]
+[node name="Terrain" type="GridMap" parent="TerrainNavigationRegion"]
 mesh_library = ExtResource("2_lk061")
-script = ExtResource("3_7emg5")
+script = ExtResource("4_5xvs4")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="InitialTerrainChangedSignalTimer" type="Timer" parent="Terrain"]
+[node name="InitialTerrainChangedSignalTimer" type="Timer" parent="TerrainNavigationRegion/Terrain"]
 one_shot = true
 
-[connection signal="timeout" from="RegenrateNavMeshTimer" to="." method="_on_timer_timeout"]
-[connection signal="terrain_changed" from="Terrain" to="." method="_on_terrain_terrain_changed"]
-[connection signal="timeout" from="Terrain/InitialTerrainChangedSignalTimer" to="Terrain" method="_on_initial_terrain_changed_signal_timer_timeout"]
+[connection signal="timeout" from="TerrainNavigationRegion/RegenrateNavMeshTimer" to="TerrainNavigationRegion" method="_on_timer_timeout"]
+[connection signal="terrain_changed" from="TerrainNavigationRegion/Terrain" to="TerrainNavigationRegion" method="_on_terrain_terrain_changed"]
+[connection signal="timeout" from="TerrainNavigationRegion/Terrain/InitialTerrainChangedSignalTimer" to="TerrainNavigationRegion/Terrain" method="_on_initial_terrain_changed_signal_timer_timeout"]

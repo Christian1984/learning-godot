@@ -10,7 +10,7 @@ material = SubResource("StandardMaterial3D_fukyv")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qom5b"]
 
-[node name="Enemy" type="CharacterBody3D"]
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 script = ExtResource("1_6d4xw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -24,3 +24,10 @@ shape = SubResource("CapsuleShape3D_qom5b")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 1.5
 debug_enabled = true
+
+[node name="RestartNavigationTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="navigation_finished" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_navigation_finished"]
+[connection signal="timeout" from="RestartNavigationTimer" to="." method="_on_restart_navigation_timer_timeout"]

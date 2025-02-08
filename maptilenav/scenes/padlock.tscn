@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://oyqfinkdy8ux"]
+
+[ext_resource type="ArrayMesh" uid="uid://drx3raoqttj0v" path="res://models/padlock-low.obj" id="1_1t1hi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_urtrm"]
+albedo_color = Color(1, 0.894118, 0, 1)
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b3b6q"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_s5321"]
+material = SubResource("StandardMaterial3D_b3b6q")
+text = "500"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_430ej"]
+radius = 0.8
+
+[sub_resource type="Animation" id="Animation_fqay8"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/PadlockMeshes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_hkrfy"]
+resource_name = "padlock_rotation"
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/PadlockMeshes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hrxtf"]
+_data = {
+"RESET": SubResource("Animation_fqay8"),
+"padlock_rotation": SubResource("Animation_hkrfy")
+}
+
+[node name="Padlock" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="PadlockMeshes" type="Node3D" parent="StaticBody3D"]
+
+[node name="PadlockMesh" type="MeshInstance3D" parent="StaticBody3D/PadlockMeshes"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, -0.725, 0)
+material_override = SubResource("StandardMaterial3D_urtrm")
+mesh = ExtResource("1_1t1hi")
+skeleton = NodePath("../../..")
+
+[node name="PriceMeshFront" type="MeshInstance3D" parent="StaticBody3D/PadlockMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, 0.15)
+mesh = SubResource("TextMesh_s5321")
+skeleton = NodePath("../../..")
+
+[node name="PriceMeshRear" type="MeshInstance3D" parent="StaticBody3D/PadlockMeshes"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.35, -0.15)
+mesh = SubResource("TextMesh_s5321")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("SphereShape3D_430ej")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hrxtf")
+}
+autoplay = "padlock_rotation"

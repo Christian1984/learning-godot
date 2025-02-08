@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://sotsdqpk375h"]
+[gd_scene load_steps=4 format=3 uid="uid://sotsdqpk375h"]
+
+[ext_resource type="Script" path="res://scripts/target.gd" id="1_mwbr2"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4p50a"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bt2sw"]
 
-[node name="Target" type="StaticBody3D"]
+[node name="Target" type="StaticBody3D" groups=["target"]]
+script = ExtResource("1_mwbr2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
