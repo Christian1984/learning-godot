@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+signal item_updated(name: String)
+
 @onready var target: Node3D = $"/root/Map/Target"
 
 const SPEED = 15.0
@@ -11,16 +13,23 @@ const FPS_MOUSE_SENSITIVITY = 0.005
 
 @export var flying = false
 
+var current_item_turret = false
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	pass
+	toggle_item_selected()
 	
 func _unhandled_input(event):
 	if (event is InputEventMouseMotion):
 		rotation.y -= event.relative.x * FPS_MOUSE_SENSITIVITY
 		cam.rotation.x = clamp(cam.rotation.x - event.relative.y * FPS_MOUSE_SENSITIVITY, -PI / 2, PI / 2)
 
-func eval_nav():	
+func toggle_item_selected():
+	current_item_turret = not current_item_turret
+	var name = "Turret" if current_item_turret else "Block"
+	item_updated.emit(name)
+
+func eval_nav():
 	var nav_maps = NavigationServer3D.get_maps()
 	for nav_map in nav_maps:
 		var path = NavigationServer3D.map_get_path(nav_map, global_position, target.global_position, false)
@@ -33,6 +42,9 @@ func eval_nav():
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("toggle_flight"):
 		flying = not flying
+
+	if Input.is_action_just_pressed("item_toggle"):
+		toggle_item_selected()
 	
 	var lmb = Input.is_action_just_pressed("lmb") 
 	var rmb = Input.is_action_just_pressed("rmb") 
@@ -45,8 +57,13 @@ func _physics_process(delta: float) -> void:
 		
 			if lmb and collider.has_method("destroy_block"):
 				collider.call("destroy_block", hit - hit_normal)
-			elif rmb and collider.has_method("create_block"):
-				collider.call("create_block", hit + hit_normal, 3)
+			elif rmb: 
+				if current_item_turret:
+					if collider.has_method("create_turret"):
+						collider.call("create_turret", hit + hit_normal)
+				else:
+					if collider.has_method("create_block"):
+						collider.call("create_block", hit + hit_normal, 3)
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.

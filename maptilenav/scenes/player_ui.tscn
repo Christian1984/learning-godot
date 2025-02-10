@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://dr4uoemlox3o2"]
+
+[ext_resource type="Script" path="res://scripts/player_ui.gd" id="1_vj7jd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1h6ei"]
+bg_color = Color(0.6, 0.6, 0.6, 0.501961)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jrkgo"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="PlayerUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_vj7jd")
+
+[node name="CoreHealthBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -186.0
+offset_top = 12.0
+offset_right = 186.0
+offset_bottom = 39.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_1h6ei")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jrkgo")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 91.0
+grow_vertical = 0
+
+[node name="ItemLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Item: "
+
+[node name="ItemDisplay" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "None"

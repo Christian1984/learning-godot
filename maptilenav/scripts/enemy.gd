@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
-@export var health: float = 10.0
+@export var max_health: float = 100.0
+@export var damage: float = 10.0
 
 @onready var target: Node3D = $"/root/Map/Target"
 @onready var player: Node3D = $"/root/Map/Player"
@@ -11,7 +12,7 @@ extends CharacterBody3D
 @onready var nav = $NavigationAgent3D
 @onready var restart_navigation_timer: Timer = $RestartNavigationTimer
 
-@onready var max_health = health
+var health = max_health
 
 const SPEED = 5.0
 const ACCELERATION = 0.2
@@ -41,14 +42,16 @@ func _physics_process(delta: float):
 		if other.has_method("get_groups"):
 			if "target" in other.get_groups():
 				print("hit target")
-				# TODO: send signal, reduce score/health
+				if (other.has_method("take_damage")):
+					other.take_damage(damage)
 				queue_free()
 				return
 		
 		if other.has_method("get_name"):
 			if other.get_name() == "Terrain":
-				print("hit terrain")
+				#print("hit terrain")
 				#TODO: check direction, if is colliding with terrain, jump
+				pass
 	
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction := (player.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -90,8 +93,6 @@ func die():
 
 func update_health_bar():
 	if health_bar:
-		var v = clamp(health / max_health, 0, 1) * 100
-		print(v)
 		health_bar.value = clamp(health / max_health, 0, 1) * 100
 		
 		if health_bar_sprite_3d:

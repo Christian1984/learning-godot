@@ -1,11 +1,20 @@
 extends StaticBody3D
 
+signal health_changed(health: float, max_health: float)
+signal core_died()
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@export var max_health = 100
+var health = max_health
 
+func _ready():
+	health_changed.emit(health, max_health)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func die():
+	core_died.emit()
+
+func take_damage(damage: float):
+	health -= damage
+	health_changed.emit(health, max_health)
+	print("core takes damage: ", damage, ", health: ", health)
+	if health <= 0:
+		die()

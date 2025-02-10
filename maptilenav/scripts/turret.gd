@@ -1,8 +1,8 @@
 extends Node3D
 
 @export var range = 5.0
-@export var damage = 1
-@export var block_size = 2
+@export var damage = 10.0
+@export var block_size = 2.0
 
 @onready var detector: Area3D = $Detector
 @onready var detector_collision_shape_3d: CollisionShape3D = $Detector/DetectorCollisionShape3D
@@ -40,5 +40,5 @@ func _on_detector_body_exited(body: Node3D):
 			current_target = null
 
 func _on_fire_timer_timeout():
-	if current_target and current_target.has_method("take_damage"):
+	if current_target and current_target.has_method("take_damage"): # TODO: use raycast to check LOS
 		current_target.take_damage(damage)

@@ -18,6 +18,7 @@ signal terrain_changed(gridmap: GridMap)
 @export var max_gain: float = 2.0
 
 var Spawner = preload("res://scenes/spawner.tscn")
+var Turret = preload("res://scenes/turret.tscn")
 var noise = FastNoiseLite.new()
 
 func emit_terrain_changed():
@@ -65,12 +66,16 @@ func _ready():
 				var item = 0
 				if y == height - 1:
 					item = 1
-					if x == half_size - 1 or x == half_size or \
-						z == half_size - 1 or z == half_size:
+					if local_horizontal_grid_position.x == -1 or \
+						local_horizontal_grid_position.x == 0 or \
+						local_horizontal_grid_position.y == -1 or \
+						local_horizontal_grid_position.y == 0:
 						item = 3
-					elif x == 0 or x == 2 * half_size - 1 or \
-						z == 0 or z == 2 * half_size - 1:
-						item = 2
+					elif local_horizontal_grid_position.x == -half_size or \
+						local_horizontal_grid_position.x == half_size - 1 or \
+						local_horizontal_grid_position.y == -half_size or \
+						local_horizontal_grid_position.y == half_size - 1:
+						item = 0
 					
 					#if x == half_size - 1 and z == half_size - 1:
 						#var spawner = Spawner.instantiate() as StaticBody3D
@@ -85,6 +90,17 @@ func _ready():
 	create_spawners()
 	initial_terrain_changed_signal_timer.wait_time = randf() * 2
 	initial_terrain_changed_signal_timer.start()
+	
+func create_turret(world_coords: Vector3):
+	var local_coords = to_local(world_coords)
+	var grid_coords = local_to_map(local_coords)
+	var local_on_grid_coords = map_to_local(grid_coords)
+	var global_on_grid_coords = to_global(local_on_grid_coords)
+	
+	var turret = Turret.instantiate() as Node3D
+	add_child(turret)
+	turret.position = global_on_grid_coords
+	print("turret created at ", global_on_grid_coords)
 
 func create_block(world_coords: Vector3, type: int):
 	var local_coords = to_local(world_coords)
